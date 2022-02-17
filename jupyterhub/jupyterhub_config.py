@@ -18,9 +18,6 @@ def create_dir_hook(spawner):
         # still readable by other users on the system
         os.mkdir(volume_path, 0o755)
         os.chown(volume_path, 1000,100)
-        # now do whatever you think your user needs
-        # ...
-        pass
 
 # attach the hook function to the spawner
 c.Spawner.pre_spawn_hook = create_dir_hook
@@ -51,9 +48,8 @@ c.DockerSpawner.network_name = network_name
 enable_nvidia = os.environ.get('JUPYTERHUB_ENABLE_NVIDIA','false')
 # Pass the network name as argument to spawned containers
 c.DockerSpawner.extra_host_config = { 'network_mode': network_name }
-if 'true' == enable_nvidia:
+if enable_nvidia == 'true':
     c.DockerSpawner.extra_host_config = { 'network_mode': network_name, 'runtime': 'nvidia' }
-    pass
 # c.DockerSpawner.extra_host_config = { 'network_mode': network_name, "devices":["/dev/nvidiactl","/dev/nvidia-uvm","/dev/nvidia0"] }
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
